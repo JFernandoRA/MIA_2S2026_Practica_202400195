@@ -1,5 +1,5 @@
 //Declaro URL de la API que usara el backend
-const Base_URL = import.meta.env.VITE_API_URL || "http://localhost:8080/api"
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080/api"
 
 export async function analyzeCommands(rawText) {
   const response = await fetch(`${BASE_URL}/analyze`, {
