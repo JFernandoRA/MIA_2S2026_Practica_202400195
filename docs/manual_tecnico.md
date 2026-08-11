@@ -45,24 +45,11 @@ de todo el analisis.
 El sistema sigue una arquitectura cliente-servidor simple, con una separacion clara de
 responsabilidades entre las dos partes:
 
-```
-+-----------------------------+           +---------------------------------------+
-|   FRONTEND (React + Vite)    |           |          BACKEND (C++)                 |
-|   Puerto 5173                 |           |   Puerto 8080                          |
-|                                |           |                                         |
-|  Editor de comandos            |  POST     |  Servidor HTTP (cpp-httplib)            |
-|  Consola de resultados         | -------> |    |                                     |
-|  api.js (cliente REST)         |  /api/    |    v                                     |
-|                                |  analyze  |  Parser (Parser.cpp)                    |
-|                                |           |    |                                     |
-|                                |  <------- |    v                                     |
-|                                |  JSON     |  Lexer (Lexer.cpp)                      |
-|                                |  results  |    |                                     |
-|                                |           |    v                                     |
-|                                |           |  Reglamento de comandos                  |
-|                                |           |  (CommandSpec.cpp)                      |
-+-----------------------------+           +---------------------------------------+
-```
+> **Imagen 1 — Diagrama de arquitectura**
+> `images/tecnico/01-arquitectura.png`
+> Puede ser una captura de este mismo diagrama, o uno propio hecho a mano/en una herramienta
+> como draw.io, mostrando frontend, backend y la flecha de comunicacion por REST.
+![Arquitectura del sistema](images/tecnico/01-arquitectura.png)
 
 El frontend nunca analiza los comandos por si mismo durante una entrega formal: unicamente envia
 el texto escrito por el usuario al backend, y pinta en pantalla la respuesta que recibe. Toda la
@@ -71,12 +58,8 @@ respaldo en JavaScript que se activa solo si el backend no responde, para poder 
 interfaz durante el desarrollo; ese modulo no forma parte de la logica de evaluacion del
 sistema.)
 
-> **Imagen 1 — Diagrama de arquitectura**
-> `images/tecnico/01-arquitectura.png`
-> Puede ser una captura de este mismo diagrama, o uno propio hecho a mano/en una herramienta
-> como draw.io, mostrando frontend, backend y la flecha de comunicacion por REST.
 
-![Arquitectura del sistema](images/tecnico/01-arquitectura.png)
+
 
 ### 2.1 Flujo de una peticion
 
