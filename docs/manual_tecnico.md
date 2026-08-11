@@ -45,10 +45,6 @@ de todo el analisis.
 El sistema sigue una arquitectura cliente-servidor simple, con una separacion clara de
 responsabilidades entre las dos partes:
 
-> **Imagen 1 — Diagrama de arquitectura**
-> `images/tecnico/01-arquitectura.png`
-> Puede ser una captura de este mismo diagrama, o uno propio hecho a mano/en una herramienta
-> como draw.io, mostrando frontend, backend y la flecha de comunicacion por REST.
 ![Arquitectura del sistema](images/tecnico/01-arquitectura.png)
 
 El frontend nunca analiza los comandos por si mismo durante una entrega formal: unicamente envia
