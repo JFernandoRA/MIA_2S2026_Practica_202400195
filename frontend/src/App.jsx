@@ -4,7 +4,7 @@ import CommandEditor from "./components/CommandEditor.jsx";
 import OutputConsole from "./components/OutputConsole.jsx";
 import StatusBar from "./components/StatusBar.jsx";
 import { analyzeCommands, checkBackendHealth } from "./services/api.js";
-import { mockAnalyze } from "./utils/mockAnalyzer.js";
+
 
 const EXAMPLE_SCRIPT = `mkdisk -size=3000 -unit=M -path=/home/user/Disco1.mia
 fdisk -size=300 -path=/home/user/Disco1.mia -name=Particion1
@@ -29,16 +29,19 @@ export default function App() {
       const online = await checkBackendHealth();
       setBackendOnline(online);
 
-      const data = online ? await analyzeCommands(script) : mockAnalyze(script);
+      if (!online) {
+        throw new Error("El backend no esta disponible");
+      }
+
+      const data = await analyzeCommands(script);
       setResults(data);
     } catch (err) {
       setBackendOnline(false);
-      setResults(mockAnalyze(script));
+      console.error(err);
     } finally {
       setIsAnalyzing(false);
     }
   }
-
   function handleClear() {
     setScript("");
     setResults([]);
