@@ -20,20 +20,34 @@ TokenizedLine tokenizeLine(const std::string& rawLine) {
     size_t firstSpace = line.find(' ');
     result.command = (firstSpace == std::string::npos) ? line : line.substr(0, firstSpace);
     std::string rest = (firstSpace == std::string::npos) ? "" : line.substr(firstSpace + 1);
-
-    std::regex paramPattern("-(\\w+)=(?:\"([^\"]*)\"|(\\S+))");
+    std::regex paramPattern("-(\\w+)(?:=(?:\"([^\"]*)\"|(\\S+)))?");
     auto begin = std::sregex_iterator(rest.begin(), rest.end(), paramPattern);
     auto end = std::sregex_iterator();
 
+    size_t lastEnd = 0;
     for (auto it = begin; it != end; ++it) {
         std::smatch match = *it;
+
+        std::string gap = rest.substr(lastEnd, match.position() - lastEnd);
+        std::string trimmedGap = trim(gap);
+        if (!trimmedGap.empty()) {
+            result.unrecognized.push_back(trimmedGap);
+        }
 
         std::string key = match[1].str();
         for (auto& c : key) c = std::tolower(c);
 
-        std::string value = match[2].matched ? match[2].str() : match[3].str();
+        std::string value;
+        if (match[2].matched) value = match[2].str();
+        else if (match[3].matched) value = match[3].str();
 
         result.params.push_back({key, value});
+        lastEnd = match.position() + match.length();
+    }
+
+    std::string trailing = trim(rest.substr(lastEnd));
+    if (!trailing.empty()) {
+        result.unrecognized.push_back(trailing);
     }
 
     return result;

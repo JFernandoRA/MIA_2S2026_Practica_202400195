@@ -10,4 +10,5 @@ struct Param {
 struct TokenizedLine {
     std::string command;
     std::vector<Param> params;
+    std::vector<std::string> unrecognized;
 };

@@ -4,15 +4,20 @@ const std::map<std::string, CommandSpec>& getCommandSpecs() {
     static const std::map<std::string, CommandSpec> specs = {
 
         {"mkdisk", {
-            {"size", "path"},                          // requerido
-            {                                            // opcional
+            {"size", "path"},
+            {
                 {"fit", {"bf", "ff", "wf"}},
                 {"unit", {"k", "m"}}
+            },
+            {
+                {"fit", "ff"},
+                {"unit", "m"}
             }
         }},
 
         {"rmdisk", {
             {"path"},
+            {},
             {}
         }},
 
@@ -22,11 +27,17 @@ const std::map<std::string, CommandSpec>& getCommandSpecs() {
                 {"unit", {"b", "k", "m"}},
                 {"type", {"p", "e", "l"}},
                 {"fit", {"bf", "ff", "wf"}}
+            },
+            {
+                {"unit", "k"},
+                {"type", "p"},
+                {"fit", "wf"}
             }
         }},
 
         {"mount", {
             {"path", "name"},
+            {},
             {}
         }},
 
@@ -34,26 +45,32 @@ const std::map<std::string, CommandSpec>& getCommandSpecs() {
             {"id"},
             {
                 {"type", {"full"}}
+            },
+            {
+                {"type", "full"}
             }
         }},
 
         {"mkusr", {
             {"user", "pass", "grp"},
+            {},
             {}
         }},
 
         {"rmusr", {
             {"user"},
+            {},
             {}
         }},
 
         {"mkfile", {
             {"path"},
             {
-                {"r", {}},      // lista vacia = acepta cualquier valor (o ninguno)
+                {"r", {}},
                 {"size", {}},
                 {"cont", {}}
-            }
+            },
+            {}
         }}
     };
 

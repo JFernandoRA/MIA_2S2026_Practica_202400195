@@ -62,6 +62,11 @@ AnalysisResult analyzeLine(const std::string& rawLine, int lineNumber) {
 
     std::vector<std::string> errors;
 
+    
+    for (const auto& piece : tokenized.unrecognized) {
+        errors.push_back("texto no reconocido: \"" + piece + "\" (revisa si un valor con espacios necesita comillas)");
+    }
+
     // Paso 3: revisar que todos los obligatorios esten presentes.
     for (const auto& req : spec.required) {
         if (seen.find(req) == seen.end()) {
@@ -116,6 +121,23 @@ AnalysisResult analyzeLine(const std::string& rawLine, int lineNumber) {
     }
 
     result.status = "ok";
-    result.message = "Comando \"" + command + "\" valido";
-    return result;
+
+        std::vector<std::string> defaultNotes;
+        for (const auto& def : spec.defaults) {
+            if (seen.find(def.first) == seen.end()) {
+                defaultNotes.push_back("-" + def.first + " no especificado, se asume " + def.second);
+            }
+        }
+
+        std::string message = "Comando \"" + command + "\" valido";
+        if (!defaultNotes.empty()) {
+            std::ostringstream noteStream;
+            for (size_t i = 0; i < defaultNotes.size(); ++i) {
+                if (i > 0) noteStream << "; ";
+                noteStream << defaultNotes[i];
+            }
+            message += " (" + noteStream.str() + ")";
+        }
+        result.message = message;
+        return result;
 }
